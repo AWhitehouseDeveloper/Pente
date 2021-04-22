@@ -10,11 +10,20 @@ public class Game : MonoBehaviour
     public Image imageW;
     public int turnCounter { get; set; } = 1;
 
-    public Button[][] board = new Button[19][];
+    public Button[,] buttons = new Button[19, 19];
 
     private void Awake()
     {
         Instance = this;
-    }
 
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("Row");
+        for(int i = 0; i < 19; i++)
+        {
+            for(int j = 0; j < 19; j++)
+            {
+                Button[] tempArr = objects[i].GetComponentsInChildren<Button>();
+                buttons[i, j] = tempArr[j];
+            }
+        }
+    }
 }
