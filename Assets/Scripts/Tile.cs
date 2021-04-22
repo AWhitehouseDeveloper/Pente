@@ -11,12 +11,10 @@ public class Tile : MonoBehaviour
         White,
         None
     }
-    public Image button;
     public eColour colour = eColour.None;
 
     private void Awake()
     {
-        button = GetComponent<Image>();
     }
 
     public void OnClick()
@@ -49,19 +47,19 @@ public class Tile : MonoBehaviour
         switch (colour)
         {
             case eColour.Black:
-                button.sprite = Game.Instance.imageB.sprite;
-                button.color = new Color(255, 255, 255, 255);
+                this.GetComponent<Image>().sprite = Game.Instance.imageB.sprite;
+                this.GetComponent<Image>().color = new Color(255, 255, 255, 255);
                 this.enabled = false;
                 break;
             case eColour.White:
-                button.sprite = Game.Instance.imageW.sprite;
-                button.color = new Color(255, 255, 255, 255);
+                this.GetComponent<Image>().sprite = Game.Instance.imageW.sprite;
+                this.GetComponent<Image>().color = new Color(255, 255, 255, 255);
                 this.enabled = false;
                 break;
             case eColour.None:
-                button.sprite = null;
+                this.GetComponent<Image>().sprite = null;
                 this.enabled = true;
-                button.color = new Color(255, 255, 255, 0);
+                this.GetComponent<Image>().color = new Color(255, 255, 255, 0);
                 break;
             default:
                 break;
