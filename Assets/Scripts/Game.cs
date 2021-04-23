@@ -10,7 +10,7 @@ public class Game : MonoBehaviour
     public Image imageW;
     public int turnCounter { get; set; } = 1;
 
-    public Button[,] buttons = new Button[19, 19];
+    public static Button[,] buttons = new Button[19, 19];
 
     private void Awake()
     {
@@ -25,5 +25,10 @@ public class Game : MonoBehaviour
                 buttons[i, j] = tempArr[j];
             }
         }
+    }
+
+    private void Update()
+    {
+        
     }
 }
