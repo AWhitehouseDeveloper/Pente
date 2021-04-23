@@ -25,7 +25,6 @@ public class Tile : MonoBehaviour
         }
 
         Game.Instance.turnCounter++;
-        this.enabled = false;
     }
 
     private void Update()
@@ -35,10 +34,12 @@ public class Tile : MonoBehaviour
             case eColour.Black:
                 this.GetComponent<Image>().sprite = Game.Instance.imageB.sprite;
                 this.GetComponent<Image>().color = new Color(255, 255, 255, 255);
+                this.enabled = false;
                 break;
             case eColour.White:
                 this.GetComponent<Image>().sprite = Game.Instance.imageW.sprite;
                 this.GetComponent<Image>().color = new Color(255, 255, 255, 255);
+                this.enabled = false;
                 break;
             case eColour.None:
                 this.GetComponent<Image>().sprite = null;
