@@ -13,10 +13,6 @@ public class Tile : MonoBehaviour
     }
     public eColour colour = eColour.None;
 
-    private void Awake()
-    {
-    }
-
     public void OnClick()
     {
         if(Game.Instance.turnCounter%2 == 1)
@@ -29,17 +25,6 @@ public class Tile : MonoBehaviour
         }
 
         Game.Instance.turnCounter++;
-    }
-
-    public void CheckForTwo()
-    {
-
-    }
-
-    public bool CheckForFive()
-    {
-
-        return false;
     }
 
     private void Update()
@@ -58,11 +43,93 @@ public class Tile : MonoBehaviour
                 break;
             case eColour.None:
                 this.GetComponent<Image>().sprite = null;
-                this.enabled = true;
                 this.GetComponent<Image>().color = new Color(255, 255, 255, 0);
+                this.enabled = true;
                 break;
             default:
                 break;
         }
+    }
+
+    public bool CheckAll(int numForCheck)
+    {
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < 19; i++)
+        {
+            for (int j = 0; j < 19; j++)
+            {
+                if (Game.buttons[i, j] == this)
+                {
+                    x = i;
+                    y = j;
+                }
+            }
+            if (x != 0 || y != 0) break;
+        }
+        if(CheckN(numForCheck, x, y)) return true;
+        if(CheckNE(numForCheck, x, y)) return true;
+        if(CheckE(numForCheck, x, y)) return true;
+        if(CheckSE(numForCheck, x, y)) return true;
+        if(CheckS(numForCheck, x, y)) return true;
+        if(CheckSW(numForCheck, x, y)) return true;
+        if(CheckW(numForCheck, x, y)) return true;
+        if(CheckNW(numForCheck, x, y)) return true;
+        return false;
+    }
+
+    public bool CheckN(int numForCheck, int x, int y)
+    {
+        bool output = false;
+        for(int i = 1; i <= numForCheck; i++)
+        {
+            if(i == numForCheck)
+            {
+                if ((Game.buttons[x-i, y].GetComponent<Tile>().colour == this.colour))
+                {
+                    output = true;
+                }
+            }
+            if(Game.buttons[x-i, y].GetComponent<Tile>().colour == this.colour || Game.buttons[x-i, y].GetComponent<Tile>().colour == eColour.None)
+            {
+                break;
+            }
+        }
+        return output;
+    }
+
+    public bool CheckNE(int numForCheck, int x, int y)
+    {
+        return false;
+    }
+
+    public bool CheckE(int numForCheck, int x, int y)
+    {
+        return false;
+    }
+
+    public bool CheckSE(int numForCheck, int x, int y)
+    {
+        return false;
+    }
+
+    public bool CheckS(int numForCheck, int x, int y)
+    {
+        return false;
+    }
+
+    public bool CheckSW(int numForCheck, int x, int y)
+    {
+        return false;
+    }
+
+    public bool CheckW(int numForCheck, int x, int y)
+    {
+        return false;
+    }
+
+    public bool CheckNW(int numForCheck, int x, int y)
+    {
+        return false;
     }
 }
