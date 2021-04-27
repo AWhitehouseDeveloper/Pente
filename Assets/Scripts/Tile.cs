@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,18 +12,27 @@ public class Tile : MonoBehaviour
     }
     public eColour colour = eColour.None;
 
+    List<Button> revertButtons = new List<Button>();
+
     public void OnClick()
     {
-        if(Game.Instance.turnCounter%2 == 1)
+        if(Game.Instance.turnCounter%2 == 1 && this.colour == eColour.None)
         {
             colour = eColour.Black;
+            Game.Instance.turnCounter++;
         }
-        else
+        else if(this.colour == eColour.None)
         {
             colour = eColour.White;
+            Game.Instance.turnCounter++;
         }
-
-        Game.Instance.turnCounter++;
+        CheckCapture();
+        foreach (Button b in revertButtons)
+        {
+            b.enabled = true;
+            b.GetComponent<Tile>().colour = eColour.None;
+        }
+        revertButtons.Clear();
     }
 
     private void Update()
@@ -34,24 +42,24 @@ public class Tile : MonoBehaviour
             case eColour.Black:
                 this.GetComponent<Image>().sprite = Game.Instance.imageB.sprite;
                 this.GetComponent<Image>().color = new Color(255, 255, 255, 255);
-                this.enabled = false;
+                this.GetComponentInParent<Button>().enabled = false;
                 break;
             case eColour.White:
                 this.GetComponent<Image>().sprite = Game.Instance.imageW.sprite;
                 this.GetComponent<Image>().color = new Color(255, 255, 255, 255);
-                this.enabled = false;
+                this.GetComponentInParent<Button>().enabled = false;
                 break;
             case eColour.None:
                 this.GetComponent<Image>().sprite = null;
                 this.GetComponent<Image>().color = new Color(255, 255, 255, 0);
-                this.enabled = true;
+                this.GetComponentInParent<Button>().enabled = true;
                 break;
             default:
                 break;
         }
     }
 
-    public bool CheckAll(int numForCheck)
+    public void CheckCapture()
     {
         int x = 0;
         int y = 0;
@@ -59,7 +67,7 @@ public class Tile : MonoBehaviour
         {
             for (int j = 0; j < 19; j++)
             {
-                if (Game.buttons[i, j] == this)
+                if (Game.buttons[i, j].GetComponent<Tile>() == this)
                 {
                     x = i;
                     y = j;
@@ -67,69 +75,86 @@ public class Tile : MonoBehaviour
             }
             if (x != 0 || y != 0) break;
         }
-        if(CheckN(numForCheck, x, y)) return true;
-        if(CheckNE(numForCheck, x, y)) return true;
-        if(CheckE(numForCheck, x, y)) return true;
-        if(CheckSE(numForCheck, x, y)) return true;
-        if(CheckS(numForCheck, x, y)) return true;
-        if(CheckSW(numForCheck, x, y)) return true;
-        if(CheckW(numForCheck, x, y)) return true;
-        if(CheckNW(numForCheck, x, y)) return true;
-        return false;
+        CheckN(x, y);
+        //if(CheckNE(numForCheck, x, y)) return true;
+        CheckE(x, y);
+        //if(CheckSE(numForCheck, x, y)) return true;
+        CheckS(x, y);
+        //if(CheckSW(numForCheck, x, y)) return true;
+        CheckW(x, y);
+        //if(CheckNW(numForCheck, x, y)) return true;
     }
 
-    public bool CheckN(int numForCheck, int x, int y)
+    public bool CheckN(int x, int y)
     {
         bool output = false;
-        for(int i = 1; i <= numForCheck; i++)
+        int num1 = CheckColorSame(x, y, -1, 0);
+        int num2 = CheckColorSame(x, y, -2, 0);
+        int num3 = CheckColorSame(x, y, -3, 0);
+        if (num1 == -1 && num2 == -1 && num3 == 1)
         {
-            if(i == numForCheck)
-            {
-                if ((Game.buttons[x-i, y].GetComponent<Tile>().colour == this.colour))
-                {
-                    output = true;
-                }
-            }
-            if(Game.buttons[x-i, y].GetComponent<Tile>().colour == this.colour || Game.buttons[x-i, y].GetComponent<Tile>().colour == eColour.None)
-            {
-                break;
-            }
+            revertButtons.Add(Game.buttons[x + -1, y]);
+            revertButtons.Add(Game.buttons[x + -2, y]);
+            output = true;
+        }
+        return output;
+    }
+    public bool CheckS(int x, int y)
+    {
+        bool output = false;
+        int num1 = CheckColorSame(x, y, 1, 0);
+        int num2 = CheckColorSame(x, y, 2, 0);
+        int num3 = CheckColorSame(x, y, 3, 0);
+        if (num1 == -1 && num2 == -1 && num3 == 1)
+        {
+            revertButtons.Add(Game.buttons[x + 1, y]);
+            revertButtons.Add(Game.buttons[x + 2, y]);
+            output = true;
         }
         return output;
     }
 
-    public bool CheckNE(int numForCheck, int x, int y)
+    public bool CheckE(int x, int y)
     {
-        return false;
+        bool output = false;
+        int num1 = CheckColorSame(x, y, 0, 1);
+        int num2 = CheckColorSame(x, y, 0, 2);
+        int num3 = CheckColorSame(x, y, 0, 3);
+        if (num1 == -1 && num2 == -1 && num3 == 1)
+        {
+            revertButtons.Add(Game.buttons[x, y + 1]);
+            revertButtons.Add(Game.buttons[x, y + 2]);
+            output = true;
+        }
+        return output;
     }
-
-    public bool CheckE(int numForCheck, int x, int y)
+    public bool CheckW(int x, int y)
     {
-        return false;
+        bool output = false;
+        int num1 = CheckColorSame(x, y, 0, -1);
+        int num2 = CheckColorSame(x, y, 0, -2);
+        int num3 = CheckColorSame(x, y, 0, -3);
+        if (num1 == -1 && num2 == -1 && num3 == 1)
+        {
+            revertButtons.Add(Game.buttons[x, y - 1]);
+            revertButtons.Add(Game.buttons[x, y - 2]);
+            output = true;
+        }
+        return output;
     }
-
-    public bool CheckSE(int numForCheck, int x, int y)
+    public int CheckColorSame(int x, int y, int xMod, int yMod)
     {
-        return false;
-    }
-
-    public bool CheckS(int numForCheck, int x, int y)
-    {
-        return false;
-    }
-
-    public bool CheckSW(int numForCheck, int x, int y)
-    {
-        return false;
-    }
-
-    public bool CheckW(int numForCheck, int x, int y)
-    {
-        return false;
-    }
-
-    public bool CheckNW(int numForCheck, int x, int y)
-    {
-        return false;
+        if (Game.buttons[x + xMod, y + yMod].GetComponent<Tile>().colour == this.colour)
+        {
+            return 1;
+        }
+        else if (Game.buttons[x + xMod, y + yMod].GetComponent<Tile>().colour == eColour.None)
+        {
+            return 0;
+        }
+        else
+        {
+            return -1;
+        }
     }
 }
