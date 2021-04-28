@@ -6,9 +6,14 @@ using UnityEngine.UI;
 public class Game : MonoBehaviour
 {
     public static Game Instance { get; set; }
-    public Image imageB;
+    public Image imageK;
     public Image imageW;
+    public Image imageR;
+    public Image imageB;
+
+    public int numPlayers = 2;
     public int turnCounter { get; set; } = 1;
+
 
     public static Button[,] buttons = new Button[19, 19];
 

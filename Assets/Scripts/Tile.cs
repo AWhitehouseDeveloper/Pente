@@ -8,6 +8,8 @@ public class Tile : MonoBehaviour
     {
         Black,
         White,
+        Red,
+        Blue,
         None
     }
     public eColour colour = eColour.None;
@@ -16,9 +18,20 @@ public class Tile : MonoBehaviour
 
     public void OnClick()
     {
-        if (Game.Instance.turnCounter % 2 == 1 && this.colour == eColour.None)
+        int playerNum = Game.Instance.numPlayers;
+        if (Game.Instance.turnCounter % playerNum == 1 && this.colour == eColour.None)
         {
             colour = eColour.Black;
+            Game.Instance.turnCounter++;
+        }
+        else if (Game.Instance.turnCounter % playerNum == 2 && this.colour == eColour.None)
+        {
+            colour = eColour.Red;
+            Game.Instance.turnCounter++;
+        }
+        else if (Game.Instance.turnCounter % playerNum == 3 && this.colour == eColour.None)
+        {
+            colour = eColour.Blue;
             Game.Instance.turnCounter++;
         }
         else if (this.colour == eColour.None)
@@ -26,9 +39,6 @@ public class Tile : MonoBehaviour
             colour = eColour.White;
             Game.Instance.turnCounter++;
         }
-        if (CheckNum(5)) //Set Text Of Tria/Tessera/Win to value
-        if (CheckNum(4)) //Set Text Of Tria/Tessera/Win to value
-        if (CheckNum(3)) //Set Text Of Tria/Tessera/Win to value
         CheckCapture();
         foreach (Button b in revertButtons)
         {
@@ -36,6 +46,9 @@ public class Tile : MonoBehaviour
             b.GetComponent<Tile>().colour = eColour.None;
         }
         revertButtons.Clear();
+        if (CheckNum(5)) {} //Set Text Of Tria/Tessera/Win to value
+        if (CheckNum(4)) {} //Set Text Of Tria/Tessera/Win to value
+        if (CheckNum(3)) {} //Set Text Of Tria/Tessera/Win to value
     }
 
     private void Update()
@@ -43,12 +56,22 @@ public class Tile : MonoBehaviour
         switch (colour)
         {
             case eColour.Black:
-                this.GetComponent<Image>().sprite = Game.Instance.imageB.sprite;
+                this.GetComponent<Image>().sprite = Game.Instance.imageK.sprite;
                 this.GetComponent<Image>().color = new Color(255, 255, 255, 255);
                 this.GetComponentInParent<Button>().enabled = false;
                 break;
             case eColour.White:
                 this.GetComponent<Image>().sprite = Game.Instance.imageW.sprite;
+                this.GetComponent<Image>().color = new Color(255, 255, 255, 255);
+                this.GetComponentInParent<Button>().enabled = false;
+                break;
+            case eColour.Red:
+                this.GetComponent<Image>().sprite = Game.Instance.imageR.sprite;
+                this.GetComponent<Image>().color = new Color(255, 255, 255, 255);
+                this.GetComponentInParent<Button>().enabled = false;
+                break;
+            case eColour.Blue:
+                this.GetComponent<Image>().sprite = Game.Instance.imageB.sprite;
                 this.GetComponent<Image>().color = new Color(255, 255, 255, 255);
                 this.GetComponentInParent<Button>().enabled = false;
                 break;
