@@ -16,16 +16,19 @@ public class Tile : MonoBehaviour
 
     public void OnClick()
     {
-        if(Game.Instance.turnCounter%2 == 1 && this.colour == eColour.None)
+        if (Game.Instance.turnCounter % 2 == 1 && this.colour == eColour.None)
         {
             colour = eColour.Black;
             Game.Instance.turnCounter++;
         }
-        else if(this.colour == eColour.None)
+        else if (this.colour == eColour.None)
         {
             colour = eColour.White;
             Game.Instance.turnCounter++;
         }
+        if (CheckNum(5)) //Set Text Of Tria/Tessera/Win to value
+        if (CheckNum(4)) //Set Text Of Tria/Tessera/Win to value
+        if (CheckNum(3)) //Set Text Of Tria/Tessera/Win to value
         CheckCapture();
         foreach (Button b in revertButtons)
         {
@@ -75,73 +78,235 @@ public class Tile : MonoBehaviour
             }
             if (x != 0 || y != 0) break;
         }
-        CheckN(x, y);
-        //if(CheckNE(numForCheck, x, y)) return true;
-        CheckE(x, y);
-        //if(CheckSE(numForCheck, x, y)) return true;
-        CheckS(x, y);
-        //if(CheckSW(numForCheck, x, y)) return true;
-        CheckW(x, y);
-        //if(CheckNW(numForCheck, x, y)) return true;
+        CheckNCapture(x, y);
+        CheckNECapture(x, y);
+        CheckECapture(x, y);
+        CheckSECapture(x, y);
+        CheckSCapture(x, y);
+        CheckSWCapture(x, y);
+        CheckWCapture(x, y);
+        CheckNWCapture(x, y);
+    }
+    public bool CheckNum(int lookingFor)
+    {
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < 19; i++)
+        {
+            for (int j = 0; j < 19; j++)
+            {
+                if (Game.buttons[i, j].GetComponent<Tile>() == this)
+                {
+                    x = i;
+                    y = j;
+                }
+            }
+            if (x != 0 || y != 0) break;
+        }
+        int total = 1;
+        total += CheckN(x, y);
+        total += CheckS(x, y);
+        if(total >= lookingFor) return true;
+        total = 1;
+        total += CheckE(x, y);
+        total += CheckW(x, y);
+        if(total >= lookingFor) return true;
+        total = 1;
+        total += CheckNE(x, y);
+        total += CheckSW(x, y);
+        if(total >= lookingFor) return true;
+        total = 1;
+        total += CheckSE(x, y);
+        total += CheckNW(x, y);
+        if (total >= lookingFor) return true;
+        return false;
+    }
+    public int CheckN(int x, int y)
+    {
+        int numColor = 0;
+        while (CheckColorSame(x, y, -(numColor + 1), 0) == 1 && x - numColor >= 0)
+        {
+            numColor++;
+        }
+        return numColor;
+    }
+    public int CheckNE(int x, int y)
+    {
+        int numColor = 0;
+        while (CheckColorSame(x, y, -(numColor + 1), (numColor + 1) ) == 1 && x - 3 >= 0 && y + 3 <= 18)
+        {
+            numColor++;
+        }
+        return numColor;
+    }
+    public int CheckE(int x, int y)
+    {
+        int numColor = 0;
+        while (CheckColorSame(x, y, 0, (numColor + 1)) == 1 && y + 3 <= 18)
+        {
+            numColor++;
+        }
+        return numColor;
+    }
+    public int CheckSE(int x, int y)
+    {
+        int numColor = 0;
+        while (CheckColorSame(x, y, (numColor + 1), (numColor + 1)) == 1 && y + 3 <= 18 && x + 3 <= 18)
+        {
+            numColor++;
+        }
+        return numColor;
+    }
+    public int CheckS(int x, int y)
+    {
+        int numColor = 0;
+        while (CheckColorSame(x, y, (numColor + 1), 0) == 1 && x + 3 <= 18)
+        {
+            numColor++;
+        }
+        return numColor;
+    }
+    public int CheckSW(int x, int y)
+    {
+        int numColor = 0;
+        while (CheckColorSame(x, y, (numColor + 1), -(numColor + 1)) == 1 && x + 3 <= 18 && y - 3 >= 0)
+        {
+            numColor++;
+        }
+        return numColor;
+    }
+    public int CheckW(int x, int y)
+    {
+        int numColor = 0;
+        while (CheckColorSame(x, y, 0, -(numColor + 1)) == 1 && y - 3 >= 0)
+        {
+            numColor++;
+        }
+        return numColor;
+    }
+    public int CheckNW(int x, int y)
+    {
+        int numColor = 0;
+        while (CheckColorSame(x, y, -(numColor + 1), -(numColor + 1)) == 1 && x - 3 >= 0 && y - 3 >= 0)
+        {
+            numColor++;
+        }
+        return numColor;
+    }
+    
+    public void CheckNCapture(int x, int y)
+    {
+        if(x - 3 >= 0)
+        {
+            int num1 = CheckColorSame(x, y, -1, 0);
+            int num2 = CheckColorSame(x, y, -2, 0);
+            int num3 = CheckColorSame(x, y, -3, 0);
+            if (num1 == -1 && num2 == -1 && num3 == 1)
+            {
+                revertButtons.Add(Game.buttons[x - 1, y]);
+                revertButtons.Add(Game.buttons[x - 2, y]);
+            }
+        }
+    }
+    public void CheckNECapture(int x, int y)
+    {
+        if (x - 3 >= 0 && y + 3 <= 18)
+        {
+            int num1 = CheckColorSame(x, y, -1, 1);
+            int num2 = CheckColorSame(x, y, -2, 2);
+            int num3 = CheckColorSame(x, y, -3, 3);
+            if (num1 == -1 && num2 == -1 && num3 == 1)
+            {
+                revertButtons.Add(Game.buttons[x + -1, y + 1]);
+                revertButtons.Add(Game.buttons[x + -2, y + 2]);
+            }
+        }
+    }
+    public void CheckECapture(int x, int y)
+    {
+        if (y + 3 <= 18)
+        {
+            int num1 = CheckColorSame(x, y, 0, 1);
+            int num2 = CheckColorSame(x, y, 0, 2);
+            int num3 = CheckColorSame(x, y, 0, 3);
+            if (num1 == -1 && num2 == -1 && num3 == 1)
+            {
+                revertButtons.Add(Game.buttons[x, y + 1]);
+                revertButtons.Add(Game.buttons[x, y + 2]);
+            }
+        }
+    }
+    public void CheckSECapture(int x, int y)
+    {
+        if (y + 3 <= 18 && x + 3 <= 18)
+        {
+            int num1 = CheckColorSame(x, y, 1, 1);
+            int num2 = CheckColorSame(x, y, 2, 2);
+            int num3 = CheckColorSame(x, y, 3, 3);
+            if (num1 == -1 && num2 == -1 && num3 == 1)
+            {
+                revertButtons.Add(Game.buttons[x + 1, y + 1]);
+                revertButtons.Add(Game.buttons[x + 2, y + 2]);
+            }
+        }
+    }
+    public void CheckSCapture(int x, int y)
+    {
+        if (x + 3 <= 18)
+        {
+            int num1 = CheckColorSame(x, y, 1, 0);
+            int num2 = CheckColorSame(x, y, 2, 0);
+            int num3 = CheckColorSame(x, y, 3, 0);
+            if (num1 == -1 && num2 == -1 && num3 == 1)
+            {
+                revertButtons.Add(Game.buttons[x + 1, y]);
+                revertButtons.Add(Game.buttons[x + 2, y]);
+            }
+        }
+    }
+    public void CheckSWCapture(int x, int y)
+    {
+        if (x + 3 <= 18 && y - 3 >= 0)
+        {
+            int num1 = CheckColorSame(x, y, 1, -1);
+            int num2 = CheckColorSame(x, y, 2, -2);
+            int num3 = CheckColorSame(x, y, 3, -3);
+            if (num1 == -1 && num2 == -1 && num3 == 1)
+            {
+                revertButtons.Add(Game.buttons[x + 1, y - 1]);
+                revertButtons.Add(Game.buttons[x + 2, y - 2]);
+            }
+        }
+    }
+    public void CheckWCapture(int x, int y)
+    {
+        if (y - 3 >= 0)
+        {
+            int num1 = CheckColorSame(x, y, 0, -1);
+            int num2 = CheckColorSame(x, y, 0, -2);
+            int num3 = CheckColorSame(x, y, 0, -3);
+            if (num1 == -1 && num2 == -1 && num3 == 1)
+            {
+                revertButtons.Add(Game.buttons[x, y - 1]);
+                revertButtons.Add(Game.buttons[x, y - 2]);
+            }
+        }
+    }
+    public void CheckNWCapture(int x, int y)
+    {
+        if (x - 3 >= 0 && y - 3 >= 0)
+        {
+            int num1 = CheckColorSame(x, y, -1, -1);
+            int num2 = CheckColorSame(x, y, -2, -2);
+            int num3 = CheckColorSame(x, y, -3, -3);
+            if (num1 == -1 && num2 == -1 && num3 == 1)
+            {
+                revertButtons.Add(Game.buttons[x - 1, y - 1]);
+                revertButtons.Add(Game.buttons[x - 2, y - 2]);
+            }
+        }
     }
 
-    public bool CheckN(int x, int y)
-    {
-        bool output = false;
-        int num1 = CheckColorSame(x, y, -1, 0);
-        int num2 = CheckColorSame(x, y, -2, 0);
-        int num3 = CheckColorSame(x, y, -3, 0);
-        if (num1 == -1 && num2 == -1 && num3 == 1)
-        {
-            revertButtons.Add(Game.buttons[x + -1, y]);
-            revertButtons.Add(Game.buttons[x + -2, y]);
-            output = true;
-        }
-        return output;
-    }
-    public bool CheckS(int x, int y)
-    {
-        bool output = false;
-        int num1 = CheckColorSame(x, y, 1, 0);
-        int num2 = CheckColorSame(x, y, 2, 0);
-        int num3 = CheckColorSame(x, y, 3, 0);
-        if (num1 == -1 && num2 == -1 && num3 == 1)
-        {
-            revertButtons.Add(Game.buttons[x + 1, y]);
-            revertButtons.Add(Game.buttons[x + 2, y]);
-            output = true;
-        }
-        return output;
-    }
-
-    public bool CheckE(int x, int y)
-    {
-        bool output = false;
-        int num1 = CheckColorSame(x, y, 0, 1);
-        int num2 = CheckColorSame(x, y, 0, 2);
-        int num3 = CheckColorSame(x, y, 0, 3);
-        if (num1 == -1 && num2 == -1 && num3 == 1)
-        {
-            revertButtons.Add(Game.buttons[x, y + 1]);
-            revertButtons.Add(Game.buttons[x, y + 2]);
-            output = true;
-        }
-        return output;
-    }
-    public bool CheckW(int x, int y)
-    {
-        bool output = false;
-        int num1 = CheckColorSame(x, y, 0, -1);
-        int num2 = CheckColorSame(x, y, 0, -2);
-        int num3 = CheckColorSame(x, y, 0, -3);
-        if (num1 == -1 && num2 == -1 && num3 == 1)
-        {
-            revertButtons.Add(Game.buttons[x, y - 1]);
-            revertButtons.Add(Game.buttons[x, y - 2]);
-            output = true;
-        }
-        return output;
-    }
     public int CheckColorSame(int x, int y, int xMod, int yMod)
     {
         if (Game.buttons[x + xMod, y + yMod].GetComponent<Tile>().colour == this.colour)
