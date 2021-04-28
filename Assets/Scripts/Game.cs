@@ -11,6 +11,11 @@ public class Game : MonoBehaviour
     public Image imageR;
     public Image imageB;
 
+    public GameObject winScreen; 
+    public GameObject titleScreen; 
+    public GameObject nameScreen; 
+    public GameObject popUpScreen; 
+
     public int numPlayers = 2;
     public int turnCounter { get; set; } = 1;
 

@@ -46,7 +46,7 @@ public class Tile : MonoBehaviour
             b.GetComponent<Tile>().colour = eColour.None;
         }
         revertButtons.Clear();
-        if (CheckNum(5)) {} //Set Text Of Tria/Tessera/Win to value
+        if (CheckNum(5)) { Game.Instance.winScreen.SetActive(true); } //Set Text Of Tria/Tessera/Win to value
         if (CheckNum(4)) {} //Set Text Of Tria/Tessera/Win to value
         if (CheckNum(3)) {} //Set Text Of Tria/Tessera/Win to value
     }
