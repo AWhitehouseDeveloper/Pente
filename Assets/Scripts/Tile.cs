@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Tile : MonoBehaviour
 {
@@ -22,33 +23,72 @@ public class Tile : MonoBehaviour
         if (Game.Instance.turnCounter % playerNum == 1 && this.colour == eColour.None)
         {
             colour = eColour.Black;
+            Game.Instance.playerWinName.SetText(Game.Instance.blackName);
             Game.Instance.turnCounter++;
         }
         else if (Game.Instance.turnCounter % playerNum == 2 && this.colour == eColour.None)
         {
             colour = eColour.Red;
+            Game.Instance.playerWinName.SetText(Game.Instance.redName);
             Game.Instance.turnCounter++;
         }
         else if (Game.Instance.turnCounter % playerNum == 3 && this.colour == eColour.None)
         {
             colour = eColour.Blue;
+            Game.Instance.playerWinName.SetText(Game.Instance.blueName);
             Game.Instance.turnCounter++;
         }
         else if (this.colour == eColour.None)
         {
             colour = eColour.White;
+            Game.Instance.playerWinName.SetText(Game.Instance.whiteName);
             Game.Instance.turnCounter++;
         }
         CheckCapture();
         foreach (Button b in revertButtons)
         {
+            switch (b.GetComponent<Tile>().colour)
+            {
+                case eColour.Black:
+                    Game.Instance.blackCaptured++;
+                    break;
+                case eColour.White:
+                    Game.Instance.whiteCaptured++;
+                    break;
+                case eColour.Red:
+                    Game.Instance.redCaptured++;
+                    break;
+                case eColour.Blue:
+                    Game.Instance.blueCaptured++;
+                    break;
+                case eColour.None:
+                    break;
+                default:
+                    break;
+            }
             b.enabled = true;
             b.GetComponent<Tile>().colour = eColour.None;
         }
         revertButtons.Clear();
-        if (CheckNum(5)) { Game.Instance.winScreen.SetActive(true); } //Set Text Of Tria/Tessera/Win to value
-        if (CheckNum(4)) {} //Set Text Of Tria/Tessera/Win to value
-        if (CheckNum(3)) {} //Set Text Of Tria/Tessera/Win to value
+        //Set Text Of Tria/Tessera/Win to value
+        if (CheckNum(5)) 
+        {
+            Game.Instance.winScreen.SetActive(true); 
+        }
+        //Set Text Of Tria/Tessera/Win to value
+        else if (CheckNum(4))
+        {
+            Game.Instance.popUpScreen.SetActive(true);
+            Game.Instance.PopUpScreenImage.GetComponent<Image>().sprite = GetSprite();
+            Game.Instance.CallOutText.GetComponent<TMP_Text>().SetText("has Tessera");
+        }
+        //Set Text Of Tria/Tessera/Win to value
+        else if (CheckNum(3)) 
+        {
+            Game.Instance.popUpScreen.SetActive(true);
+            Game.Instance.PopUpScreenImage.GetComponent<Image>().sprite = GetSprite();
+            Game.Instance.CallOutText.GetComponent<TMP_Text>().SetText("has Tria");
+        } 
     }
 
     private void Update()
@@ -144,6 +184,7 @@ public class Tile : MonoBehaviour
         if (total >= lookingFor) return true;
         return false;
     }
+
     public int CheckN(int x, int y)
     {
         int numColor = 0;
@@ -343,6 +384,23 @@ public class Tile : MonoBehaviour
         else
         {
             return -1;
+        }
+    }
+
+    public Sprite GetSprite()
+    {
+        switch (colour)
+        {
+            case eColour.Black:
+                return Game.Instance.imageK.sprite;
+            case eColour.White:
+                return Game.Instance.imageW.sprite;
+            case eColour.Red:
+                return Game.Instance.imageR.sprite;
+            case eColour.Blue:
+                return Game.Instance.imageB.sprite;
+            default:
+                return null;
         }
     }
 }
