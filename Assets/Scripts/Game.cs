@@ -6,11 +6,21 @@ using UnityEngine.UI;
 public class Game : MonoBehaviour
 {
     public static Game Instance { get; set; }
-    public Image imageB;
+    public Image imageK;
     public Image imageW;
+    public Image imageR;
+    public Image imageB;
+
+    public GameObject winScreen; 
+    public GameObject titleScreen; 
+    public GameObject nameScreen; 
+    public GameObject popUpScreen; 
+
+    public int numPlayers = 2;
     public int turnCounter { get; set; } = 1;
 
-    public Button[,] buttons = new Button[19, 19];
+
+    public static Button[,] buttons = new Button[19, 19];
 
     private void Awake()
     {
@@ -25,5 +35,10 @@ public class Game : MonoBehaviour
                 buttons[i, j] = tempArr[j];
             }
         }
+    }
+
+    private void Update()
+    {
+        
     }
 }
