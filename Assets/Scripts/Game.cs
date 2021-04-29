@@ -159,7 +159,6 @@ public class Game : MonoBehaviour
     {
         winScreen.SetActive(false);
         titleScreen.SetActive(true);
-        //Game.Instance = null;
     }
     public void OnExitApp()
     {

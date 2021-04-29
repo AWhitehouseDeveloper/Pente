@@ -19,9 +19,6 @@ public class EnumUI : MonoBehaviour
         if (data != null)
         {
             name = data.name;
-
-
-
             dropdown.ClearOptions();
             dropdown.AddOptions(new List<string>(data.names));
         }
