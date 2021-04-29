@@ -43,7 +43,31 @@ public class Game : MonoBehaviour
     public Image PopUpScreenImage;
     public TMP_Text CallOutText;
 
+    public TMP_Text playerTurnText;
+
+    public PlayerEnumData playerData;
     public int numPlayers = 2;
+    public int NumPlayers
+    {
+        get { return numPlayers; } set
+        {
+            switch (value)
+            {
+                case 0:
+                    numPlayers = 2;
+                    break;
+                case 1:
+                    numPlayers = 3;
+                    break;
+                case 2:
+                    numPlayers = 4;
+                    break;
+                default:
+                    numPlayers = 2;
+                    break;
+            }
+        } 
+    }
     public int turnCounter { get; set; } = 1;
 
 
@@ -61,6 +85,10 @@ public class Game : MonoBehaviour
                 buttons[i, j] = tempArr[j];
             }
         }
+        Blacklost.value = false;
+        Whitelost.value = false;
+        Redlost.value = false;
+        Bluelost.value = false;
     }
     private void Update()
     {
@@ -83,15 +111,23 @@ public class Game : MonoBehaviour
         switch (turnCounter%numPlayers)
         {
             case 0:
+                if (Whitelost.value)
+                {
+                    turnCounter++;
+                }
+                else
+                {
+                    playerTurnText.text = whiteName.value;
+                }
+                break;
+            case 1:
                 if(Blacklost.value)
                 {
                     turnCounter++;
                 }
-                break;
-            case 1:
-                if (Whitelost.value)
+                else
                 {
-                    turnCounter++;
+                    playerTurnText.text = blackName.value;
                 }
                 break;
             case 2:
@@ -99,11 +135,19 @@ public class Game : MonoBehaviour
                 {
                     turnCounter++;
                 }
+                else
+                {
+                    playerTurnText.text = redName.value;
+                }
                 break;
             case 3:
                 if (Bluelost.value)
                 {
                     turnCounter++;
+                }
+                else
+                {
+                    playerTurnText.text = blueName.value;
                 }
                 break;
             default:
@@ -113,8 +157,9 @@ public class Game : MonoBehaviour
 
     public void OnExit()
     {
-        Game.Instance = null;
+        winScreen.SetActive(false);
         titleScreen.SetActive(true);
+        //Game.Instance = null;
     }
     public void OnExitApp()
     {
@@ -124,6 +169,29 @@ public class Game : MonoBehaviour
     {
         titleScreen.SetActive(false);
         nameScreen.SetActive(true);
+        switch (numPlayers)
+        {
+            case 2:
+                BlackNameFeild.GetComponent<GameObject>().SetActive(true);
+                WhiteNameFeild.GetComponent<GameObject>().SetActive(true);
+                RedNameFeild.GetComponent<GameObject>().SetActive(false);
+                BlueNameFeild.GetComponent<GameObject>().SetActive(false);
+                break;
+            case 3:
+                BlackNameFeild.GetComponent<GameObject>().SetActive(true);
+                WhiteNameFeild.GetComponent<GameObject>().SetActive(true);
+                RedNameFeild.GetComponent<GameObject>().SetActive(true);
+                BlueNameFeild.GetComponent<GameObject>().SetActive(false);
+                break;
+            case 4:
+                BlackNameFeild.GetComponent<GameObject>().SetActive(true);
+                WhiteNameFeild.GetComponent<GameObject>().SetActive(true);
+                RedNameFeild.GetComponent<GameObject>().SetActive(true);
+                BlueNameFeild.GetComponent<GameObject>().SetActive(true);
+                break;
+            default:
+                break;
+        }
     }
     public void OnEnterNames()
     {
@@ -150,6 +218,10 @@ public class Game : MonoBehaviour
             }
         }
         buttons[9, 9].GetComponent<Tile>().colour = Tile.eColour.White;
+        Blacklost.value = false;
+        Whitelost.value = false;
+        Redlost.value = false;
+        Bluelost.value = false;
     }
     public void OnPlayAgain()
     {

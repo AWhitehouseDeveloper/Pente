@@ -373,6 +373,7 @@ public class Tile : MonoBehaviour
 
     public int CheckColorSame(int x, int y, int xMod, int yMod)
     {
+        if (x + xMod >= 19 || y + yMod >= 19) return 0;
         if (Game.buttons[x + xMod, y + yMod].GetComponent<Tile>().colour == this.colour)
         {
             return 1;
