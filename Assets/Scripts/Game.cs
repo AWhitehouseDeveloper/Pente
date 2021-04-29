@@ -170,24 +170,24 @@ public class Game : MonoBehaviour
         nameScreen.SetActive(true);
         switch (numPlayers)
         {
-            case 2:
-                BlackNameFeild.GetComponent<GameObject>().SetActive(true);
-                WhiteNameFeild.GetComponent<GameObject>().SetActive(true);
-                RedNameFeild.GetComponent<GameObject>().SetActive(false);
-                BlueNameFeild.GetComponent<GameObject>().SetActive(false);
-                break;
-            case 3:
-                BlackNameFeild.GetComponent<GameObject>().SetActive(true);
-                WhiteNameFeild.GetComponent<GameObject>().SetActive(true);
-                RedNameFeild.GetComponent<GameObject>().SetActive(true);
-                BlueNameFeild.GetComponent<GameObject>().SetActive(false);
-                break;
-            case 4:
-                BlackNameFeild.GetComponent<GameObject>().SetActive(true);
-                WhiteNameFeild.GetComponent<GameObject>().SetActive(true);
-                RedNameFeild.GetComponent<GameObject>().SetActive(true);
-                BlueNameFeild.GetComponent<GameObject>().SetActive(true);
-                break;
+            //case 2:
+            //    BlackNameFeild.GetComponent<GameObject>().SetActive(true);
+            //    WhiteNameFeild.GetComponent<GameObject>().SetActive(true);
+            //    RedNameFeild.GetComponent<GameObject>().SetActive(false);
+            //    BlueNameFeild.GetComponent<GameObject>().SetActive(false);
+            //    break;
+            //case 3:
+            //    BlackNameFeild.GetComponent<GameObject>().SetActive(true);
+            //    WhiteNameFeild.GetComponent<GameObject>().SetActive(true);
+            //    RedNameFeild.GetComponent<GameObject>().SetActive(true);
+            //    BlueNameFeild.GetComponent<GameObject>().SetActive(false);
+            //    break;
+            //case 4:
+            //    BlackNameFeild.GetComponent<GameObject>().SetActive(true);
+            //    WhiteNameFeild.GetComponent<GameObject>().SetActive(true);
+            //    RedNameFeild.GetComponent<GameObject>().SetActive(true);
+            //    BlueNameFeild.GetComponent<GameObject>().SetActive(true);
+            //    break;
             default:
                 break;
         }
